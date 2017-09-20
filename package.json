@@ -25,7 +25,15 @@
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "rules": {
+      "import/no-extraneous-dependencies": "off",
+      "no-param-reassign": "off",
+      "no-new": "off",
+      "class-methods-use-this": "off",
+      "no-console": "off",
+      "no-underscore-dangle": "off"
+    }
   },
   "dependencies": {
     "babel-cli": "^6.18.0",
@@ -47,7 +55,7 @@
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
-    "babel-eslint": "^7.0.0",
+    "babel-eslint": "^8.0.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
@@ -55,14 +63,14 @@
     "chai": "^3.5.0",
     "coveralls": "^2.11.14",
     "del": "^2.2.2",
-    "eslint": "^3.8.0",
-    "eslint-config-airbnb-base": "^8.0.0",
-    "eslint-plugin-import": "^1.16.0",
+    "eslint": "^4.7.1",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.1.2",
+    "nodemon": "^1.11.0",
     "rollup": "^0.36.3",
     "rollup-plugin-babel": "^2.6.1",
-    "nodemon": "^1.11.0",
     "sinon": "^2.0.0-pre.3"
   },
   "scripts": {
@@ -75,6 +83,7 @@
     "prepublish": "npm run build",
     "publish:docs": "easystatic deploy docs --repo kriasoft/babel-starter-kit",
     "dev": "nodemon --exec babel-node -- src/index.js",
+    "devLog": "nodemon --exec babel-node -- src/index.js | bunyan -o short",
     "start": "easystatic start docs"
   }
 }

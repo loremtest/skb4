@@ -14,7 +14,7 @@ const run = async () => {
   try {
     console.log('Welcome to Babel Starter Kit!'); // eslint-disable-line no-console
     if (document.querySelector('.stats')) {
-      onStats(stats => {
+      onStats((stats) => {
         document.querySelector('.stats-forks span').innerText = stats.forks;
         document.querySelector('.stats-stars span').innerText = stats.watchers;
         document.querySelector('.stats-subscribers span').innerText = stats.subscribers;

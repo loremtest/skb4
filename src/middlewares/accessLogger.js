@@ -19,28 +19,28 @@ function logFinish(data) {
   return `${leftPad(data.method, 4)} ${data.url} ${leftPad(data.status, 3)} ${leftPad(time, 7)}ms ${leftPad(length, 5)}b reqId=${data.reqId}`;
 }
 
-export default (params) => ([
+export default ctx => ([
   (req, res, next) => {
-    const data = {}
-    if (!req.log) throw 'has no req.log!'
+    const data = {};
+    if (!req.log) throw 'has no req.log!';
     const log = req.log.child({
       component: 'req',
     });
 
-    data.reqId = req.reqId
-    data.method = req.method
-    if (req.ws) data.method = 'WS'
-    data.host = req.headers.host
-    data.url = (req.baseUrl || '') + (req.url || '-')
-    data.referer = req.header('referer') || req.header('referrer')
+    data.reqId = req.reqId;
+    data.method = req.method;
+    if (req.ws) data.method = 'WS';
+    data.host = req.headers.host;
+    data.url = (req.baseUrl || '') + (req.url || '-');
+    data.referer = req.header('referer') || req.header('referrer');
     data.ip = req.ip || req.connection.remoteAddress ||
         (req.socket && req.socket.remoteAddress) ||
         (req.socket.socket && req.socket.socket.remoteAddress) ||
-        '127.0.0.1'
+        '127.0.0.1';
 
 
     if (__DEV__) {
-      log.debug(data, logStart(data));
+      // log.debug(data, logStart(data));
       if (req.body) {
         log.trace(JSON.stringify(req.body));
       }
@@ -48,16 +48,16 @@ export default (params) => ([
 
     const hrtime = process.hrtime();
     function logging() {
-      data.status = res.statusCode
-      data.length = res.getHeader('Content-Length')
+      data.status = res.statusCode;
+      data.length = res.getHeader('Content-Length');
 
       const diff = process.hrtime(hrtime);
-      data.duration = diff[0] * 1e3 + diff[1] * 1e-6
+      data.duration = (diff[0] * 1e3) + (diff[1] * 1e-6);
 
       log[levelFn(data)](data, logFinish(data));
     }
     res.on('finish', logging);
     res.on('close', logging);
     next();
-  }
-])
+  },
+]);

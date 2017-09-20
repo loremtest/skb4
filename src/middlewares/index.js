@@ -7,5 +7,5 @@ export default function () {
     catchError: require('./catchError').default(...arguments),
     reqLog: require('./reqLog').default(...arguments),
     extendReqRes: require('./extendReqRes').default(...arguments),
-  }
+  };
 }

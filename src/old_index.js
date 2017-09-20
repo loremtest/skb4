@@ -18,7 +18,7 @@ const log = bunyan.createLogger({
   name: 'app',
   src: __DEV__,
   level: 'trace',
-})
+});
 
 log.info('Starting');
 const middlewares = getMiddlewares({
@@ -56,20 +56,22 @@ app.get('/', (req, res) => {
 
 const secret = 'shhhhhhared-secret';
 
-app.get('/token',
-  function(req, res) {
+app.get(
+  '/token',
+  (req, res) => {
     const data = {
       user: 'isuvorov',
       name: 'Igor Suvorov',
     };
     return res.json(jwt.sign(data, secret));
-  });
+  },
+);
 
-app.get('/protected',
-  expressJwt({secret}),
-  function(req, res) {
-    return res.json(req.user)
-  });
+app.get(
+  '/protected',
+  expressJwt({ secret }),
+  (req, res) => res.json(req.user),
+);
 app.all('/auth/validate', auth.validate);
 app.post('/auth/signup', auth.signup);
 app.post('/auth/login', auth.login);
@@ -77,8 +79,6 @@ app.post('/auth/login', auth.login);
 
 const api = getApi({});
 app.use('/api', api);
-
-
 
 
 app.listen(3000, () => {

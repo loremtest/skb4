@@ -15,12 +15,12 @@ const load = (() => {
   const timeout = 5000;
 
   return url => new Promise((resolve, reject) => {
-    const callback = '__callback' + index++;
+    const callback = `__callback${index++}`;
     const timeoutID = window.setTimeout(() => {
       reject(new Error('Request timeout.'));
     }, timeout);
 
-    window[callback] = response => {
+    window[callback] = (response) => {
       window.clearTimeout(timeoutID);
       resolve(response);
     };
@@ -28,7 +28,7 @@ const load = (() => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.async = true;
-    script.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callback;
+    script.src = `${url + (url.indexOf('?') === -1 ? '?' : '&')}callback=${callback}`;
     document.getElementsByTagName('head')[0].appendChild(script);
   });
 })();
@@ -61,7 +61,7 @@ const onStats = (() => {
         window.localStorage.setItem(key, JSON.stringify(data));
         callback(data.value);
       } else {
-        throw new Error('Request failed. ' + response);
+        throw new Error(`Request failed. ${response}`);
       }
     }
   };

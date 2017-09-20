@@ -9,55 +9,53 @@ import getApi from './api';
 export default class App {
   constructor(params = {}) {
     Object.assign(this, params);
-    if (!this.log) this.log = this.getLogger();
+    if (!this.log) this.log = App.getLogger();
     this.init();
   }
-
-  getLogger(params) {
-    return bunyan.createLogger(Object.assign({
-      name: 'app',
-      src: __DEV__,
-      level: 'trace',
-    }, params))
-  }
-
-  getMiddlewares() {
-    return getMiddlewares(this);
-  }
-  getModels() {
-    return getModels(this);
-  }
-  getDatabase() {
-    return {
-      run: () => {
-        new Promise((resolve) => {
-          mongoose.connect(this.config.db.url);
-          resolve();
-        });
-      }
-    }
-  }
-  getResourses() {
-    return getResourses(this);
-  }
-
   init() {
     this.log.trace('App init');
 
     this.app = express();
     this.db = this.getDatabase();
     this.middlewares = this.getMiddlewares();
-    this.log.trace('middlewares', Object.keys(this.middlewares));
     this.models = this.getModels();
-    this.log.trace('models', Object.keys(this.models));
     this.resourses = this.getResourses();
+    this.log.trace('middlewares', Object.keys(this.middlewares));
+    this.log.trace('models', Object.keys(this.models));
     this.log.trace('resourses', Object.keys(this.resourses));
 
     this.useMiddlewares();
     this.useRoutes();
+    // this.app.use(this.middlewares.catchError);
     this.useDefaultRoute();
   }
-
+  static getLogger(params) {
+    return bunyan.createLogger(Object.assign({
+      name: 'App',
+      // eslint-disable-next-line no-undef
+      src: __DEV__,
+      level: 'trace',
+    }, params));
+  }
+  getDatabase() {
+    return {
+      run: () => {
+        new Promise((resolve) => {
+          mongoose.connect(this.config.db.url, { useMongoClient: true });
+          resolve();
+        });
+      },
+    };
+  }
+  getMiddlewares() {
+    return getMiddlewares(this);
+  }
+  getModels() {
+    return getModels(this);
+  }
+  getResourses() {
+    return getResourses(this);
+  }
   useMiddlewares() {
     this.app.use(this.middlewares.reqLog);
     this.app.use(this.middlewares.accessLogger);
@@ -75,7 +73,6 @@ export default class App {
       next(err);
     });
   }
-
   async run() {
     this.log.trace('App run');
     try {
