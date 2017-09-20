@@ -49,7 +49,7 @@
     "express-jwt": "^5.1.0",
     "jsonwebtoken": "^7.1.9",
     "left-pad": "^1.1.3",
-    "mongoose": "^4.6.7",
+    "mongoose": "^4.11.12",
     "uuid": "^2.0.3"
   },
   "devDependencies": {
@@ -84,6 +84,7 @@
     "publish:docs": "easystatic deploy docs --repo kriasoft/babel-starter-kit",
     "dev": "nodemon --exec babel-node -- src/index.js",
     "devLog": "nodemon --exec babel-node -- src/index.js | bunyan -o short",
+    "devTest": "nodemon --exec babel-node -- src/testCode.js | bunyan -o short",
     "start": "easystatic start docs"
   }
 }
