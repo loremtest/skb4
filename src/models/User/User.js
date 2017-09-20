@@ -62,7 +62,6 @@ export default (ctx) => {
     }
   }
 
-
   UserSchema.loadClass(UserClass);
 
   const SALT_WORK_FACTOR = 10;
